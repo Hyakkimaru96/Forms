@@ -80,11 +80,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
-
-
-
-
 class ThreadPage extends StatefulWidget {
   ThreadPage({Key? key}) : super(key: key);
 
@@ -120,7 +115,8 @@ class _ThreadPageState extends State<ThreadPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Thread Page')),
+        title: Text('Thread Page'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -162,37 +158,67 @@ class _ThreadPageState extends State<ThreadPage> {
                   return null;
                 },
               ),
-              SizedBox(height: _tags.isEmpty ? 0 : 16),
-              Wrap(
-  spacing: 8.0,
-  runSpacing: 4.0,
-  children: _tags.map((tag) {
-    return Container(
-      child: Chip(
-      label: Text(tag),
-      onDeleted: () {
-        setState(() {
-          _tags.remove(tag);
-        });
-      },
+SizedBox(height: _tags.isEmpty ? 0 : 0),
+Stack(
+  children: [
+    Container(
+      height: _tags.isNotEmpty ? 50 : null,
     ),
-    );
-  }).toList(),
-)
-,
-              TextFormField(
-                controller: _tagsController,
-                decoration: InputDecoration(labelText: 'Tags'),
-                onChanged: (value) {
-                  if (value.isNotEmpty && value.endsWith(' ')) {
-                    setState(() {
-                      String tag = value.trim();
-                      _tags.add(tag);
-                      _tagsController.clear();
-                    });
+    Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: TextFormField(
+            controller: _tagsController,
+            decoration: InputDecoration(labelText: 'Tags'),
+            onChanged: (value) {
+              if (value.isNotEmpty && value.endsWith(' ')) {
+                setState(() {
+                  String tag = value.trim();
+                  if (!_tags.contains(tag)) {
+                    _tags.add(tag);
                   }
-                },
-              ),
+                  _tagsController.clear();
+                });
+              }
+            },
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: _tags
+                  .where((tag) => tag.isNotEmpty) // Filter out empty tags
+                  .map((tag) {
+                    return Container(
+                      child: Chip(
+                        label: Text(tag),
+                        onDeleted: () {
+                          setState(() {
+                            _tags.remove(tag);
+                          });
+                        },
+                      ),
+                    );
+                  })
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
+    ),
+  ],
+),
+
+
+
+
+
+
+
               TextFormField(
                 controller: _commentsController,
                 decoration: InputDecoration(labelText: 'Comments'),
@@ -313,39 +339,64 @@ class _JobPostPageState extends State<JobPostPage> {
                   return null;
                 },
               ),
-              SizedBox(height: _tags.isEmpty ? 0 : 16),
-              Wrap(
-  spacing: 8.0,
-  runSpacing: 4.0,
-  children: _tags.map((tag) {
-    return Container(
-      child: Chip(
-      label: Text(tag),
-      onDeleted: () {
-        setState(() {
-          _tags.remove(tag);
-        });
-      },
-    ),
-    );
-  }).toList(),
-)
+             SizedBox(height: _tags.isEmpty ? 0 : 0),
 
-,
-              TextFormField(
-                controller: _tagsController,
-                decoration: InputDecoration(labelText: 'Tags'),
-                onChanged: (value) {
-                  if (value.isNotEmpty && value.endsWith(' ')) {
-                    setState(() {
-                      String tag = value.trim();
-                      _tags.add(tag);
-                      _tagsController.clear();
-                    });
+SizedBox(height: _tags.isEmpty ? 0 : 0),
+Stack(
+  children: [
+    Container(
+      height: _tags.isNotEmpty ? 50 : null,
+    ),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: TextFormField(
+            controller: _tagsController,
+            decoration: InputDecoration(labelText: 'Tags'),
+            onChanged: (value) {
+              if (value.isNotEmpty && value.endsWith(' ')) {
+                setState(() {
+                  String tag = value.trim();
+                  if (!_tags.contains(tag)) {
+                    _tags.add(tag);
                   }
-                },
-              ),
-              ElevatedButton(
+                  _tagsController.clear();
+                });
+              }
+            },
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: _tags
+                  .where((tag) => tag.isNotEmpty) // Filter out empty tags
+                  .map((tag) {
+                    return Container(
+                      child: Chip(
+                        label: Text(tag),
+                        onDeleted: () {
+                          setState(() {
+                            _tags.remove(tag);
+                          });
+                        },
+                      ),
+                    );
+                  })
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
+    ),
+  ],
+),
+            
+                ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.black),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -402,7 +453,7 @@ class _StartupPageStateState extends State<StartupPageState> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.black, 
         title: Text('Startup Page')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
